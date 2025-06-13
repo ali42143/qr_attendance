@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Учёт посещаемости</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 40px;
+    }
+    table {
+      width: 100%%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    th, td {
+      border: 1px solid #ccc;
+      padding: 10px;
+    }
+    input, button {
+      padding: 10px;
+      font-size: 16px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Система учёта посещаемости</h1>
+  <input type="text" id="studentId" placeholder="Введите ID студента" />
+  <button onclick="addRecord()">Добавить</button>
+
+  <div id="qrcode" style="margin-top: 20px;"></div>
+
+  <table id="recordsTable">
+    <thead>
+      <tr>
+        <th>ID Студента</th>
+        <th>Время</th>
+      </tr>
+    </thead>
+    <tbody id="recordsBody"></tbody>
+  </table>
+
+  <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
+  <script>
+    function addRecord() {
+      const id = document.getElementById("studentId").value.trim();
+      if (!id) return;
+      const now = new Date().toLocaleString();
+      const row = `<tr><td>${id}</td><td>${now}</td></tr>`;
+      document.getElementById("recordsBody").innerHTML += row;
+      document.getElementById("studentId").value = "";
+      generateQR(id);
+    }
+
+    function generateQR(text) {
+      document.getElementById("qrcode").innerHTML = "";
+      QRCode.toCanvas(document.getElementById("qrcode"), text, function (error) {
+        if (error) console.error(error);
+      });
+    }
+  </script>
+</body>
+</html>
